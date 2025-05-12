@@ -22,21 +22,23 @@ pip install -r requirements.txt
 ```bash
 DEVMAN_TOKEN=asfgafgadfg495
 TELEGRAM_BOT_TOKEN=afgafgafg49
+TELEGRAM_CHAT_ID=21341234
 ```
 #### Как получить токены
 
-*  Токен для Девмана можно получить по [ссылке](https://dvmn.org/api/docs/)
-*  Токен для телеграм бота можно получить при создании бота [ссылке](https://telegram.me/BotFather)
+*  Токен для Девмана  DEVMAN_TOKEN можно получить по [ссылке](https://dvmn.org/api/docs/)
+*  Токен для телеграм бота TELEGRAM_BOT_TOKEN можно получить при создании бота [ссылке](https://telegram.me/BotFather)
+* TELEGRAM_CHAT_ID - ваш айди в телеграме, можно получить у [бота](https://telegram.me/userinfobot) 
 
 ### Запустите скрипт 
 ```sh
-python main.py [chat_id]
+python main.py 
 ```
 Где chat_id - ваш айди в телеграме, можно получить у [бота](https://telegram.me/userinfobot) 
 ### При наличии uv
 - Просто запустите скрипт с помощью uv 
 ```sh
-uv run main.py [chat_id]
+uv run main.py 
 ```
 
 ### Примечание

@@ -4,20 +4,8 @@ from dotenv import load_dotenv
 import os
 import logging
 import telegram
-import argparse
-
 
 logger = logging.getLogger(__file__)
-
-
-def parse_chat_id():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "chat_id",
-        help="Chat id  можно получить у бота: @userinfobot",
-        type=int,
-    )
-    return parser.parse_args().chat_id
 
 
 def long_poll_devman(headers, timestamp):
@@ -30,7 +18,7 @@ def long_poll_devman(headers, timestamp):
 def main():
     logger.setLevel(logging.INFO)
     load_dotenv()
-    chat_id = parse_chat_id()
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
     TG_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
     bot = telegram.Bot(token=TG_TOKEN)
     timestamp = time.time()
