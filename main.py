@@ -6,8 +6,8 @@ import logging
 import telegram
 import argparse
 
-logging.basicConfig(level=logging.INFO)
-load_dotenv()
+
+logger = logging.getLogger(__file__)
 
 
 def parse_chat_id():
@@ -16,7 +16,7 @@ def parse_chat_id():
         "chat_id",
         help="Chat id  можно получить у бота: @userinfobot",
         type=int,
-        )
+    )
     return parser.parse_args().chat_id
 
 
@@ -28,6 +28,8 @@ def long_poll_devman(headers, timestamp):
 
 
 def main():
+    logger.setLevel(logging.INFO)
+    load_dotenv()
     chat_id = parse_chat_id()
     TG_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
     bot = telegram.Bot(token=TG_TOKEN)
@@ -39,9 +41,9 @@ def main():
         try:
             response = long_poll_devman(headers, timestamp)
             status = response["status"]
-            logging.debug(f"Ответ: {response}")
+            logger.debug(f"Ответ: {response}")
             if status == "timeout":
-                logging.info("Нет активных проверок, повторяю запрос")
+                logger.info("Нет активных проверок, повторяю запрос")
                 timestamp = response["timestamp_to_request"]
             elif status == "found":
                 bot.send_message(chat_id=chat_id, text="Проверена новая работа!")
@@ -54,13 +56,13 @@ def main():
                         chat_id=chat_id,
                         text=f"Проверена работа '{title}' \n"
                         f"Статус проверки: {attempt_status}\n"
-                        f"Ссылка на урок: {lesson_url}"
+                        f"Ссылка на урок: {lesson_url}",
                     )
                 timestamp = response["last_attempt_timestamp"]
         except requests.exceptions.ReadTimeout:
-            logging.info("Таймаут, повторяю запрос")
+            logger.info("Таймаут, повторяю запрос")
         except requests.exceptions.ConnectionError:
-            logging.info("Ошибка соединения, жду 5 секунд и повторяю запрос")
+            logger.info("Ошибка соединения, жду 5 секунд и повторяю запрос")
             time.sleep(5)
 
 
