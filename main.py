@@ -18,13 +18,12 @@ def long_poll_devman(headers, timestamp):
 def main():
     logger.setLevel(logging.INFO)
     load_dotenv()
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
-    TG_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-    bot = telegram.Bot(token=TG_TOKEN)
+    chat_id = os.environ["TELEGRAM_CHAT_ID"]
+    tg_token = os.environ["TELEGRAM_BOT_TOKEN"]
+    bot = telegram.Bot(token=tg_token)
     timestamp = time.time()
-
-    DEVMAN_TOKEN = os.getenv("DEVMAN_TOKEN")
-    headers = {"Authorization": f"Token {DEVMAN_TOKEN}"}
+    dvmn_token = os.environ["DEVMAN_TOKEN"]
+    headers = {"Authorization": f"Token {dvmn_token}"}
     while True:
         try:
             response = long_poll_devman(headers, timestamp)
