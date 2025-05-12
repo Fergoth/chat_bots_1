@@ -41,7 +41,7 @@ def main():
             status = response["status"]
             logging.debug(f"Ответ: {response}")
             if status == "timeout":
-                logging.debug("Нет активных проверок, повторяю запрос")
+                logging.info("Нет активных проверок, повторяю запрос")
                 timestamp = response["timestamp_to_request"]
             elif status == "found":
                 bot.send_message(chat_id=chat_id, text="Проверена новая работа!")
@@ -56,7 +56,7 @@ def main():
                         f"Статус проверки: {attempt_status}\n"
                         f"Ссылка на урок: {lesson_url}"
                     )
-                timestamp = time.time()
+                timestamp = response["last_attempt_timestamp"]
         except requests.exceptions.ReadTimeout:
             logging.info("Таймаут, повторяю запрос")
         except requests.exceptions.ConnectionError:
