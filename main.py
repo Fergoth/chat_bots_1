@@ -5,13 +5,15 @@ import os
 import logging
 import telegram
 
+
 logger = logging.getLogger(__file__)
 
 
-def get_long_poll_devman(headers, timestamp):
+def request_notification(headers, timestamp):
     devman_url = "https://dvmn.org/api/long_polling/"
     params = {"timestamp": timestamp}
     response = requests.get(devman_url, headers=headers, params=params)
+    response.raise_for_status()
     return response.json()
 
 
@@ -26,7 +28,7 @@ def main():
     headers = {"Authorization": f"Token {dvmn_token}"}
     while True:
         try:
-            response = get_long_poll_devman(headers, timestamp)
+            response = request_notification(headers, timestamp)
             status = response["status"]
             logger.debug(f"Ответ: {response}")
             if status == "timeout":
@@ -50,6 +52,9 @@ def main():
             continue
         except requests.exceptions.ConnectionError:
             logger.info("Ошибка соединения, жду 5 секунд и повторяю запрос")
+            time.sleep(5)
+        except requests.HTTPError as e:
+            logger.info(f"Сервер вернул код ошибки:{e}")
             time.sleep(5)
 
 
