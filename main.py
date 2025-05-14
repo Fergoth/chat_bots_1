@@ -35,7 +35,7 @@ def main():
     tg_debug_token = os.environ.get("TELEGRAM_DEBUG_BOT_TOKEN")
     if tg_debug_token:
         logger.addHandler(TelegramLogsHandler(chat_id, tg_debug_token))
-    logger.setLevel(logging.ERROR)
+    logger.setLevel(logging.INFO)
     logger.info("Бот запущен")
     bot = telegram.Bot(token=tg_token)
     timestamp = time.time()
@@ -47,7 +47,7 @@ def main():
             status = response["status"]
             logger.debug(f"Ответ: {response}")
             if status == "timeout":
-                logger.info("Нет активных проверок, повторяю запрос")
+                logger.debug("Нет активных проверок, повторяю запрос")
                 timestamp = response["timestamp_to_request"]
             elif status == "found":
                 bot.send_message(chat_id=chat_id, text="Проверена новая работа!")
