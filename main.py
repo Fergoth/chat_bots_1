@@ -35,7 +35,7 @@ def main():
     tg_debug_token = os.environ.get("TELEGRAM_DEBUG_BOT_TOKEN")
     if tg_debug_token:
         logger.addHandler(TelegramLogsHandler(chat_id, tg_debug_token))
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.ERROR)
     logger.info("Бот запущен")
     bot = telegram.Bot(token=tg_token)
     timestamp = time.time()
