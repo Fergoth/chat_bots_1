@@ -43,7 +43,6 @@ def main():
     headers = {"Authorization": f"Token {dvmn_token}"}
     while True:
         try:
-            1/0
             response = request_notification(headers, timestamp)
             status = response["status"]
             logger.debug(f"Ответ: {response}")
