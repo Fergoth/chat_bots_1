@@ -23,11 +23,12 @@ pip install -r requirements.txt
 DEVMAN_TOKEN=asfgafgadfg495
 TELEGRAM_BOT_TOKEN=afgafgafg49
 TELEGRAM_CHAT_ID=21341234
+TELEGRAM_DEBUG_BOT_TOKEN=afgafgafg49 
 ```
 #### Как получить токены
 
 *  Токен для Девмана  DEVMAN_TOKEN можно получить по [ссылке](https://dvmn.org/api/docs/)
-*  Токен для телеграм бота TELEGRAM_BOT_TOKEN можно получить при создании бота [ссылке](https://telegram.me/BotFather)
+*  Токен для телеграм бота TELEGRAM_BOT_TOKEN(бот который отправляет сообщения о проверке работ) и TELEGRAM_DEBUG_BOT_TOKEN(Бот для отладки, **Необязательный**, если не указан, логи идут в консоль) можно получить при создании бота [ссылке](https://telegram.me/BotFather)
 * TELEGRAM_CHAT_ID - ваш айди в телеграме, можно получить у [бота](https://telegram.me/userinfobot) 
 
 ### Запустите скрипт 

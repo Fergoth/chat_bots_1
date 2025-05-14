@@ -9,6 +9,17 @@ import telegram
 logger = logging.getLogger(__file__)
 
 
+class TelegramLogsHandler(logging.Handler):
+    def __init__(self, chat_id, tg_token):
+        super().__init__()
+        self.chat_id = chat_id
+        self.bot = telegram.Bot(token=tg_token)
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 def request_notification(headers, timestamp):
     devman_url = "https://dvmn.org/api/long_polling/"
     params = {"timestamp": timestamp}
@@ -18,16 +29,21 @@ def request_notification(headers, timestamp):
 
 
 def main():
-    logger.setLevel(logging.INFO)
     load_dotenv()
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     tg_token = os.environ["TELEGRAM_BOT_TOKEN"]
+    tg_debug_token = os.environ.get("TELEGRAM_DEBUG_BOT_TOKEN")
+    if tg_debug_token:
+        logger.addHandler(TelegramLogsHandler(chat_id, tg_debug_token))
+    logger.setLevel(logging.INFO)
+    logger.info("Бот запущен")
     bot = telegram.Bot(token=tg_token)
     timestamp = time.time()
     dvmn_token = os.environ["DEVMAN_TOKEN"]
     headers = {"Authorization": f"Token {dvmn_token}"}
     while True:
         try:
+            1/0
             response = request_notification(headers, timestamp)
             status = response["status"]
             logger.debug(f"Ответ: {response}")
@@ -51,10 +67,13 @@ def main():
         except requests.exceptions.ReadTimeout:
             continue
         except requests.exceptions.ConnectionError:
-            logger.info("Ошибка соединения, жду 5 секунд и повторяю запрос")
+            logger.error("Ошибка соединения, жду 5 секунд и повторяю запрос")
             time.sleep(5)
         except requests.HTTPError as e:
-            logger.info(f"Сервер вернул код ошибки:{e}")
+            logger.error(f"Сервер вернул код ошибки:{e}")
+            time.sleep(5)
+        except Exception as e:
+            logger.error(f"Неизвестная ошибка:{e}")
             time.sleep(5)
 
 
